@@ -9,6 +9,10 @@ contract Token {
     uint112 public decimals = 10 ** 18;
     uint256 public totalSupply;
 
+    mapping(address => uint256) public balanceOf;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
     constructor(
         string memory _name,
         string memory _symbol,
@@ -17,5 +21,17 @@ contract Token {
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply * decimals;
+        balanceOf[msg.sender] = totalSupply;
+    }
+
+    function transfer(
+        address _to,
+        uint256 _value
+    ) public returns (bool success) {
+        require(balanceOf[msg.sender] >= _value, "Insufficient balance");
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(msg.sender, _to, _value);
+        return true;
     }
 }
