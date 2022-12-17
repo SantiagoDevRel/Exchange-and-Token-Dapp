@@ -1,7 +1,13 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
-
 import "hardhat/console.sol";
+
+/*Functions:
+    Transfer
+    Approve (give permission to other wallet to transfer "X" amount of tokens)
+    transferFrom (let the allowed-wallet to transfer "X" tokens to any other wallet)
+    _transfer (local Fn that update the balances -= and +=)
+*/
 
 contract Token {
     string public name;
@@ -53,7 +59,7 @@ contract Token {
         address _to,
         uint256 _value
     ) public returns (bool success) {
-        require(balanceOf[_from] >= _value);
+        require(balanceOf[_from] >= _value, "Insufficient balance");
         require(
             allowance[_from][msg.sender] >= _value,
             "You are not allowed to spend this amount"
